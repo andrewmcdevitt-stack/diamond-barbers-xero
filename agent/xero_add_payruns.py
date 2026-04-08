@@ -15,7 +15,6 @@ import os
 from pathlib import Path
 
 from playwright.async_api import async_playwright
-from playwright_stealth import stealth_async
 
 DATA_DIR    = Path(__file__).parent.parent / "data"
 PROFILE_DIR = DATA_DIR / "firefox_profile"
@@ -81,7 +80,6 @@ async def run():
             viewport={"width": 1280, "height": 800},
         )
         page = context.pages[0] if context.pages else await context.new_page()
-        await stealth_async(page)
 
         print("Checking Xero session...")
         await page.goto("https://payroll.xero.com/PayRun/PayRun", wait_until="load", timeout=30000)
