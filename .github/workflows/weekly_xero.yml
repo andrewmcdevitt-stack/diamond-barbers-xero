@@ -1,0 +1,64 @@
+name: Weekly Xero Payroll Fill
+
+on:
+  schedule:
+    # Monday 2:00am AEST (Darwin UTC+9:30 = Sunday 16:30 UTC)
+    # Runs 1 hour after FRESHA TO GHL so GHL data is ready
+    - cron: '30 16 * * 0'
+  workflow_dispatch:
+
+jobs:
+  fill:
+    runs-on: ubuntu-latest
+
+    env:
+      GHL_API_KEY:       ${{ secrets.GHL_API_KEY }}
+      GHL_LOCATION_ID:   ${{ secrets.GHL_LOCATION_ID }}
+      XERO_CLIENT_ID:    ${{ secrets.XERO_CLIENT_ID }}
+      XERO_CLIENT_SECRET: ${{ secrets.XERO_CLIENT_SECRET }}
+      CI: "true"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install firefox
+          playwright install-deps firefox
+
+      - name: Restore Firefox profile from session repo
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          git clone https://x-access-token:$GH_TOKEN@github.com/andrewmcdevitt-stack/xero-session.git /tmp/xero-session
+          mkdir -p data
+          cp -r /tmp/xero-session/firefox_profile data/firefox_profile
+          cp /tmp/xero-session/xero_token.json data/xero_token.json
+
+      - name: Run xero_fill_payslips.py
+        run: python agent/xero_fill_payslips.py
+
+      - name: Save updated Firefox profile back to session repo
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          if [ -d data/firefox_profile ]; then
+            cp -r data/firefox_profile /tmp/xero-session/firefox_profile
+          fi
+          if [ -f data/xero_token.json ]; then
+            cp data/xero_token.json /tmp/xero-session/xero_token.json
+          fi
+          cd /tmp/xero-session
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add -A
+          git diff --staged --quiet || git commit -m "Update Xero session $(date -u +%Y-%m-%d)"
+          git push
