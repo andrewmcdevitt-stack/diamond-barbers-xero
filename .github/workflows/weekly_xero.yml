@@ -42,11 +42,11 @@ jobs:
           cp -r /tmp/xero-session/firefox_profile data/firefox_profile
           cp /tmp/xero-session/xero_token.json data/xero_token.json
 
-      - name: Add pay runs and activate employees (Playwright)
+      - name: Add pay runs (Playwright)
         run: python agent/xero_add_payruns.py
 
-      - name: Fill payslip details (Playwright)
-        run: python agent/xero_fill_payslips.py
+      - name: Fill payslip earnings (Xero API)
+        run: python agent/xero_create_payrun.py
 
       - name: Save updated Firefox profile back to session repo
         if: always()
