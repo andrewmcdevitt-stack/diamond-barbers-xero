@@ -61,6 +61,7 @@ async def add_pay_run_for_org(page, org):
 
     except Exception as e:
         print(f"  ERROR: Could not find or click 'Add Pay Run' button: {e}")
+        print(f"  PAGE TEXT (first 500 chars): {page_text[:500]}")
         return False
 
 
