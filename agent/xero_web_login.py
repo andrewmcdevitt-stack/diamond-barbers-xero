@@ -12,7 +12,6 @@ When Xero eventually logs you out (weeks/months), just run this again.
 import asyncio
 from pathlib import Path
 from playwright.async_api import async_playwright
-from playwright_stealth import stealth_async
 
 DATA_DIR     = Path(__file__).parent.parent / "data"
 PROFILE_DIR  = DATA_DIR / "firefox_profile"
@@ -30,16 +29,13 @@ async def login():
         )
         page = context.pages[0] if context.pages else await context.new_page()
 
-        # Patch bot-detection signals so Akamai doesn't block the login page
-        await stealth_async(page)
-
         # Navigate to payroll — this redirects naturally to login.xero.com if not logged in.
         # Going via payroll (not directly to login.xero.com) avoids Akamai's bot block.
         print("Navigating to Xero payroll (will redirect to login if needed)...")
         await page.goto("https://payroll.xero.com/PayRun/PayRun", wait_until="load", timeout=30000)
         await page.wait_for_timeout(1500)
 
-        if "payroll.xero.com" in page.url:
+        if page.url.startswith("https://payroll.xero.com"):
             print(f"Already logged in — {page.url}")
         else:
             print("=" * 60)
@@ -58,7 +54,7 @@ async def login():
             except Exception:
                 pass
 
-            if "payroll.xero.com" not in page.url:
+            if not page.url.startswith("https://payroll.xero.com"):
                 print("\nERROR: Login timed out. Please try again.")
                 await context.close()
                 return
