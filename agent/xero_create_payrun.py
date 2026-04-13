@@ -188,6 +188,8 @@ def load_from_ghl():
         }
 
     print(f"  Loaded {len(data)} employees.")
+    for n, d in sorted(data.items()):
+        print(f"    {n:35s}  org={d['xero_org']}")
     return data
 
 
@@ -297,6 +299,8 @@ def process_org(tenant_id, tenant_name, access_token, ghl_data):
             )
 
         if not emp or emp.get("xero_org") != ghl_org_label:
+            actual_org = emp.get("xero_org", "NOT IN GHL") if emp else "NOT IN GHL"
+            print(f"  UNMATCHED: {xero_norm!r} — GHL org={actual_org!r}, expected={ghl_org_label!r}")
             continue
 
         if emp["weekday_hrs"] + emp["saturday_hrs"] + emp["sunday_hrs"] == 0:
