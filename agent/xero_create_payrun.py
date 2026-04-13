@@ -90,8 +90,15 @@ GHL_ORG_TO_XERO = {
 XERO_TO_GHL = {
     "anthony  crispo":      "anthony crispo",
     "jairo espinosa mejia": "jairo espinosa",
-    "nikolaos diamantis":   "nico diamantis",
-    "vincenzo vanzanella":  "vince vincenzo",
+}
+
+# Employees whose Fresha location doesn't match their Xero payroll org.
+# These override the xero_org value from GHL.
+EMPLOYEE_ORG_OVERRIDE = {
+    "andrea palma":        "Diamond Barbers Darwin",
+    "brazil lamsen":       "Diamond Barbers Darwin",
+    "krish manocha":       "Diamond Barbers Parap",
+    "vincenzo vanzanella": "Diamond Barbers Parap",
 }
 
 
@@ -297,6 +304,12 @@ def process_org(tenant_id, tenant_name, access_token, ghl_data):
                  if k.split()[0] == first and v.get("xero_org") == ghl_org_label),
                 None
             )
+
+        # Apply employee-level org override if defined
+        if xero_norm in EMPLOYEE_ORG_OVERRIDE:
+            if emp:
+                emp = dict(emp)
+                emp["xero_org"] = EMPLOYEE_ORG_OVERRIDE[xero_norm]
 
         if not emp or emp.get("xero_org") != ghl_org_label:
             actual_org = emp.get("xero_org", "NOT IN GHL") if emp else "NOT IN GHL"
