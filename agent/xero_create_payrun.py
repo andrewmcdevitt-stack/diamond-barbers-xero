@@ -49,37 +49,40 @@ GHL_HEADERS     = {
 # ── Earnings rate IDs per Xero org ────────────────────────────────────────────
 ORG_RATES = {
     "Diamond Barbers Pty Ltd": {
-        "monday":     "ba08c024-1289-420e-8e46-4a00d989815b",
-        "tuesday":    "00cfd9c0-cf8d-46b1-8503-02c8b4e25e50",
-        "wednesday":  "414c36eb-b5cc-4b25-8063-9358930e8368",
-        "thursday":   "95b47ce1-19f0-4fd1-9fa6-386b27ea3696",
-        "friday":     "4652ee75-937b-41a8-adc3-40b570ec24dc",
-        "saturday":   "b7771727-60d0-4e37-8f60-fca50b0f4423",
-        "sunday":     "c7d4a9e4-e735-485f-8700-c7d29a17dff4",
-        "tips":       "759bbf1f-a20a-4123-bb17-80842dc688ec",
-        "commission": "fb04b066-99fa-4b56-815b-94092a009e38",
+        "monday":         "ba08c024-1289-420e-8e46-4a00d989815b",
+        "tuesday":        "00cfd9c0-cf8d-46b1-8503-02c8b4e25e50",
+        "wednesday":      "414c36eb-b5cc-4b25-8063-9358930e8368",
+        "thursday":       "95b47ce1-19f0-4fd1-9fa6-386b27ea3696",
+        "friday":         "4652ee75-937b-41a8-adc3-40b570ec24dc",
+        "saturday":       "b7771727-60d0-4e37-8f60-fca50b0f4423",
+        "sunday":         "c7d4a9e4-e735-485f-8700-c7d29a17dff4",
+        "public_holiday": "9e0ed6e9-a684-4e4b-ac86-628e8d4195b8",
+        "tips":           "759bbf1f-a20a-4123-bb17-80842dc688ec",
+        "commission":     "fb04b066-99fa-4b56-815b-94092a009e38",
     },
     "DIAMOND BARBERS CAIRNS PTY LTD": {
-        "monday":     "0ac27a0f-b798-4f26-b53a-7e1c1c300f03",
-        "tuesday":    "10a69950-d8b3-4be3-bba1-363cefab7342",
-        "wednesday":  "3538e9ac-111d-4653-95bc-b6194278e013",
-        "thursday":   "29ab0820-40de-4b45-9f77-ecc4ee2392aa",
-        "friday":     "5e2a8ce0-e9d4-4b97-9d9a-bb28e1a927d4",
-        "saturday":   "18b97f5d-455b-42ee-846b-63550acb6b5d",
-        "sunday":     "3c88813b-e892-4b9b-9e27-22c5fa734379",
-        "tips":       "d6aef20e-4ed4-4d92-88c8-3dd3afa6eb23",
-        "commission": "42714ec9-fb41-4498-9cea-b0a2c8b6f4f3",
+        "monday":         "0ac27a0f-b798-4f26-b53a-7e1c1c300f03",
+        "tuesday":        "10a69950-d8b3-4be3-bba1-363cefab7342",
+        "wednesday":      "3538e9ac-111d-4653-95bc-b6194278e013",
+        "thursday":       "29ab0820-40de-4b45-9f77-ecc4ee2392aa",
+        "friday":         "5e2a8ce0-e9d4-4b97-9d9a-bb28e1a927d4",
+        "saturday":       "18b97f5d-455b-42ee-846b-63550acb6b5d",
+        "sunday":         "3c88813b-e892-4b9b-9e27-22c5fa734379",
+        "public_holiday": "eb5bfe90-fada-4888-be3c-576e4493a296",
+        "tips":           "d6aef20e-4ed4-4d92-88c8-3dd3afa6eb23",
+        "commission":     "42714ec9-fb41-4498-9cea-b0a2c8b6f4f3",
     },
     "D.B. Parap Pty Ltd": {
-        "monday":     "2c266681-811c-4c02-9ea0-f133885b214c",
-        "tuesday":    "3b2a9946-1718-43d1-821a-5102dd089d55",
-        "wednesday":  "856c518d-88ce-4af7-9f4b-f05cab2fda5d",
-        "thursday":   "1ba75264-93a0-4170-a7f5-edccf065ec9c",
-        "friday":     "bf2ecf3b-13ba-4f85-8cb2-564b18694390",
-        "saturday":   "3d92631e-7e25-4ba6-9c4c-d0e3a822e674",
-        "sunday":     "ca82390d-dacf-4dfc-8bad-29647fc118fa",
-        "tips":       "f9261b3a-0659-48e4-990c-40d770cef73c",
-        "commission": "9b40d911-89b7-401b-82c1-662fa9e2c782",
+        "monday":         "2c266681-811c-4c02-9ea0-f133885b214c",
+        "tuesday":        "3b2a9946-1718-43d1-821a-5102dd089d55",
+        "wednesday":      "856c518d-88ce-4af7-9f4b-f05cab2fda5d",
+        "thursday":       "1ba75264-93a0-4170-a7f5-edccf065ec9c",
+        "friday":         "bf2ecf3b-13ba-4f85-8cb2-564b18694390",
+        "saturday":       "3d92631e-7e25-4ba6-9c4c-d0e3a822e674",
+        "sunday":         "ca82390d-dacf-4dfc-8bad-29647fc118fa",
+        "public_holiday": "fdf8a34c-dae1-40a1-baad-1cc0d481f671",
+        "tips":           "f9261b3a-0659-48e4-990c-40d770cef73c",
+        "commission":     "9b40d911-89b7-401b-82c1-662fa9e2c782",
     },
 }
 
@@ -340,8 +343,9 @@ def process_org(tenant_id, tenant_name, access_token, ghl_data):
         if emp["wednesday_hrs"] > 0: lines.append({"EarningsRateID": rates["wednesday"], "NumberOfUnits": emp["wednesday_hrs"]})
         if emp["thursday_hrs"]  > 0: lines.append({"EarningsRateID": rates["thursday"],  "NumberOfUnits": emp["thursday_hrs"]})
         if emp["friday_hrs"]    > 0: lines.append({"EarningsRateID": rates["friday"],    "NumberOfUnits": emp["friday_hrs"]})
-        if emp["saturday_hrs"]  > 0: lines.append({"EarningsRateID": rates["saturday"],  "NumberOfUnits": emp["saturday_hrs"]})
-        if emp["sunday_hrs"]    > 0: lines.append({"EarningsRateID": rates["sunday"],    "NumberOfUnits": emp["sunday_hrs"]})
+        if emp["saturday_hrs"]  > 0: lines.append({"EarningsRateID": rates["saturday"],      "NumberOfUnits": emp["saturday_hrs"]})
+        if emp["sunday_hrs"]    > 0: lines.append({"EarningsRateID": rates["sunday"],        "NumberOfUnits": emp["sunday_hrs"]})
+        if emp["ph_hrs"]        > 0: lines.append({"EarningsRateID": rates["public_holiday"],"NumberOfUnits": emp["ph_hrs"]})
         if emp["tips"]          > 0: lines.append({"EarningsRateID": rates["tips"],      "NumberOfUnits": 1, "RatePerUnit": emp["tips"]})
         if emp["commission"]    > 0: lines.append({"EarningsRateID": rates["commission"],"NumberOfUnits": 1, "RatePerUnit": emp["commission"]})
 
