@@ -49,21 +49,33 @@ GHL_HEADERS     = {
 # ── Earnings rate IDs per Xero org ────────────────────────────────────────────
 ORG_RATES = {
     "Diamond Barbers Pty Ltd": {
-        "weekday":    "ba08c024-1289-420e-8e46-4a00d989815b",
+        "monday":     "ba08c024-1289-420e-8e46-4a00d989815b",
+        "tuesday":    "00cfd9c0-cf8d-46b1-8503-02c8b4e25e50",
+        "wednesday":  "414c36eb-b5cc-4b25-8063-9358930e8368",
+        "thursday":   "95b47ce1-19f0-4fd1-9fa6-386b27ea3696",
+        "friday":     "4652ee75-937b-41a8-adc3-40b570ec24dc",
         "saturday":   "b7771727-60d0-4e37-8f60-fca50b0f4423",
         "sunday":     "c7d4a9e4-e735-485f-8700-c7d29a17dff4",
         "tips":       "759bbf1f-a20a-4123-bb17-80842dc688ec",
         "commission": "fb04b066-99fa-4b56-815b-94092a009e38",
     },
     "DIAMOND BARBERS CAIRNS PTY LTD": {
-        "weekday":    "0ac27a0f-b798-4f26-b53a-7e1c1c300f03",
+        "monday":     "0ac27a0f-b798-4f26-b53a-7e1c1c300f03",
+        "tuesday":    "10a69950-d8b3-4be3-bba1-363cefab7342",
+        "wednesday":  "3538e9ac-111d-4653-95bc-b6194278e013",
+        "thursday":   "29ab0820-40de-4b45-9f77-ecc4ee2392aa",
+        "friday":     "5e2a8ce0-e9d4-4b97-9d9a-bb28e1a927d4",
         "saturday":   "18b97f5d-455b-42ee-846b-63550acb6b5d",
         "sunday":     "3c88813b-e892-4b9b-9e27-22c5fa734379",
         "tips":       "d6aef20e-4ed4-4d92-88c8-3dd3afa6eb23",
         "commission": "42714ec9-fb41-4498-9cea-b0a2c8b6f4f3",
     },
     "D.B. Parap Pty Ltd": {
-        "weekday":    "2c266681-811c-4c02-9ea0-f133885b214c",
+        "monday":     "2c266681-811c-4c02-9ea0-f133885b214c",
+        "tuesday":    "3b2a9946-1718-43d1-821a-5102dd089d55",
+        "wednesday":  "856c518d-88ce-4af7-9f4b-f05cab2fda5d",
+        "thursday":   "1ba75264-93a0-4170-a7f5-edccf065ec9c",
+        "friday":     "bf2ecf3b-13ba-4f85-8cb2-564b18694390",
         "saturday":   "3d92631e-7e25-4ba6-9c4c-d0e3a822e674",
         "sunday":     "ca82390d-dacf-4dfc-8bad-29647fc118fa",
         "tips":       "f9261b3a-0659-48e4-990c-40d770cef73c",
@@ -177,21 +189,18 @@ def load_from_ghl():
         name = (p.get("employee_name") or "").strip()
         if not name:
             continue
-        weekday_hrs = (
-            float(p.get("monday_hours",    0) or 0) +
-            float(p.get("tuesday_hours",   0) or 0) +
-            float(p.get("wednesday_hours", 0) or 0) +
-            float(p.get("thursday_hours",  0) or 0) +
-            float(p.get("friday_hours",    0) or 0)
-        )
         data[norm(name)] = {
-            "xero_org":     p.get("xero_org", ""),
-            "weekday_hrs":  round(weekday_hrs, 2),
-            "saturday_hrs": round(float(p.get("saturday_hours",       0) or 0), 2),
-            "sunday_hrs":   round(float(p.get("sunday_hours",         0) or 0), 2),
-            "ph_hrs":       round(float(p.get("public_holiday_hours", 0) or 0), 2),
-            "tips":         round(float(p.get("tips",        0) or 0), 2),
-            "commission":   round(float(p.get("commissions", 0) or 0), 2),
+            "xero_org":       p.get("xero_org", ""),
+            "monday_hrs":     round(float(p.get("monday_hours",         0) or 0), 2),
+            "tuesday_hrs":    round(float(p.get("tuesday_hours",        0) or 0), 2),
+            "wednesday_hrs":  round(float(p.get("wednesday_hours",      0) or 0), 2),
+            "thursday_hrs":   round(float(p.get("thursday_hours",       0) or 0), 2),
+            "friday_hrs":     round(float(p.get("friday_hours",         0) or 0), 2),
+            "saturday_hrs":   round(float(p.get("saturday_hours",       0) or 0), 2),
+            "sunday_hrs":     round(float(p.get("sunday_hours",         0) or 0), 2),
+            "ph_hrs":         round(float(p.get("public_holiday_hours", 0) or 0), 2),
+            "tips":           round(float(p.get("tips",        0) or 0), 2),
+            "commission":     round(float(p.get("commissions", 0) or 0), 2),
         }
 
     print(f"  Loaded {len(data)} employees.")
@@ -316,16 +325,25 @@ def process_org(tenant_id, tenant_name, access_token, ghl_data):
             print(f"  UNMATCHED: {xero_norm!r} — GHL org={actual_org!r}, expected={ghl_org_label!r}")
             continue
 
-        if emp["weekday_hrs"] + emp["saturday_hrs"] + emp["sunday_hrs"] == 0:
+        total_hrs = (
+            emp["monday_hrs"] + emp["tuesday_hrs"] + emp["wednesday_hrs"] +
+            emp["thursday_hrs"] + emp["friday_hrs"] +
+            emp["saturday_hrs"] + emp["sunday_hrs"]
+        )
+        if total_hrs == 0:
             skipped.append(f"{xero_norm} (no hours)")
             continue
 
         lines = []
-        if emp["weekday_hrs"]  > 0: lines.append({"EarningsRateID": rates["weekday"],    "NumberOfUnits": emp["weekday_hrs"]})
-        if emp["saturday_hrs"] > 0: lines.append({"EarningsRateID": rates["saturday"],   "NumberOfUnits": emp["saturday_hrs"]})
-        if emp["sunday_hrs"]   > 0: lines.append({"EarningsRateID": rates["sunday"],     "NumberOfUnits": emp["sunday_hrs"]})
-        if emp["tips"]         > 0: lines.append({"EarningsRateID": rates["tips"],       "NumberOfUnits": 1, "RatePerUnit": emp["tips"]})
-        if emp["commission"]   > 0: lines.append({"EarningsRateID": rates["commission"], "NumberOfUnits": 1, "RatePerUnit": emp["commission"]})
+        if emp["monday_hrs"]    > 0: lines.append({"EarningsRateID": rates["monday"],    "NumberOfUnits": emp["monday_hrs"]})
+        if emp["tuesday_hrs"]   > 0: lines.append({"EarningsRateID": rates["tuesday"],   "NumberOfUnits": emp["tuesday_hrs"]})
+        if emp["wednesday_hrs"] > 0: lines.append({"EarningsRateID": rates["wednesday"], "NumberOfUnits": emp["wednesday_hrs"]})
+        if emp["thursday_hrs"]  > 0: lines.append({"EarningsRateID": rates["thursday"],  "NumberOfUnits": emp["thursday_hrs"]})
+        if emp["friday_hrs"]    > 0: lines.append({"EarningsRateID": rates["friday"],    "NumberOfUnits": emp["friday_hrs"]})
+        if emp["saturday_hrs"]  > 0: lines.append({"EarningsRateID": rates["saturday"],  "NumberOfUnits": emp["saturday_hrs"]})
+        if emp["sunday_hrs"]    > 0: lines.append({"EarningsRateID": rates["sunday"],    "NumberOfUnits": emp["sunday_hrs"]})
+        if emp["tips"]          > 0: lines.append({"EarningsRateID": rates["tips"],      "NumberOfUnits": 1, "RatePerUnit": emp["tips"]})
+        if emp["commission"]    > 0: lines.append({"EarningsRateID": rates["commission"],"NumberOfUnits": 1, "RatePerUnit": emp["commission"]})
 
         payslip_list.append({
             "EmployeeID":    emp_id,
@@ -406,9 +424,11 @@ def process_org(tenant_id, tenant_name, access_token, ghl_data):
                 "EarningsLines": clean(ps)["EarningsLines"],
             }])
             e = ps["_emp"]
-            print(f"  OK  {ps['_name']:30s}  wk={e['weekday_hrs']}h  "
-                  f"sat={e['saturday_hrs']}h  sun={e['sunday_hrs']}h  "
-                  f"tips=${e['tips']}  comm=${e['commission']}")
+            print(f"  OK  {ps['_name']:30s}  "
+                  f"mon={e['monday_hrs']}h  tue={e['tuesday_hrs']}h  "
+                  f"wed={e['wednesday_hrs']}h  thu={e['thursday_hrs']}h  "
+                  f"fri={e['friday_hrs']}h  sat={e['saturday_hrs']}h  "
+                  f"sun={e['sunday_hrs']}h  tips=${e['tips']}  comm=${e['commission']}")
             ok += 1
         except Exception as ex:
             print(f"  ERROR {ps['_name']}: {ex}")
