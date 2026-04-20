@@ -105,6 +105,7 @@ GHL_ORG_TO_XERO = {
 XERO_TO_GHL = {
     "anthony  crispo":      "anthony crispo",
     "jairo espinosa mejia": "jairo espinosa",
+    "jack mathew":          "jack matthew",
 }
 
 # Employees whose Fresha location doesn't match their Xero payroll org.
@@ -114,6 +115,7 @@ EMPLOYEE_ORG_OVERRIDE = {
     "brazil lamsen":       "Diamond Barbers Darwin",
     "krish manocha":       "Diamond Barbers Parap",
     "vincenzo vanzanella": "Diamond Barbers Parap",
+    "sean maguire":        "Diamond Barbers Parap",
 }
 
 
