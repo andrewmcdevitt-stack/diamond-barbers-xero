@@ -26,12 +26,9 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Restore Xero token
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          git clone https://x-access-token:$GH_TOKEN@github.com/andrewmcdevitt-stack/xero-session.git /tmp/xero-session
           mkdir -p data
-          cp /tmp/xero-session/xero_token.json data/xero_token.json
+          echo "${{ secrets.XERO_TOKEN_B64 }}" | base64 --decode > data/xero_token.json
 
       - name: Fill payslip earnings (Xero API)
         run: python agent/xero_create_payrun.py
@@ -42,11 +39,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           if [ -f data/xero_token.json ]; then
-            cp data/xero_token.json /tmp/xero-session/xero_token.json
+            base64 -w 0 data/xero_token.json | gh secret set XERO_TOKEN_B64 --repo ${{ github.repository }}
           fi
-          cd /tmp/xero-session
-          git config user.email "actions@github.com"
-          git config user.name "GitHub Actions"
-          git add xero_token.json
-          git diff --staged --quiet || git commit -m "Update Xero token $(date -u +%Y-%m-%d)"
-          git push
