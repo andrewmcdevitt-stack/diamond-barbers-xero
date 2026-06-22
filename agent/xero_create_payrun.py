@@ -106,6 +106,7 @@ XERO_TO_GHL = {
     "anthony  crispo":      "anthony crispo",
     "jairo espinosa mejia": "jairo espinosa",
     "jack mathew":          "jack matthew",
+    "dion mataele":         "d mataele",
 }
 
 # Employees whose Fresha location doesn't match their Xero payroll org.
