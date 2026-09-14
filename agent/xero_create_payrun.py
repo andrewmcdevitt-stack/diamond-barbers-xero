@@ -59,7 +59,7 @@ ORG_RATES = {
         "public_holiday": "9e0ed6e9-a684-4e4b-ac86-628e8d4195b8",
         "tips":           "759bbf1f-a20a-4123-bb17-80842dc688ec",
         "commission":     "fb04b066-99fa-4b56-815b-94092a009e38",
-        "bonus":          "dd0c717f-95e1-42d0-9946-929c73ce1857",
+        "bonus":          "7cd33337-ad09-42d6-b83b-ae75637afe3f",
     },
     "DIAMOND BARBERS CAIRNS PTY LTD": {
         "monday":         "0ac27a0f-b798-4f26-b53a-7e1c1c300f03",
