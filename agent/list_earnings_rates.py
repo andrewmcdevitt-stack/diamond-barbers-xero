@@ -66,8 +66,8 @@ def main():
         print(f"ORG: {tenant_name}  (tenantId={tenant_id})")
         print(f"{'='*60}")
         try:
-            data  = xero_get("/payroll.xro/1.0/EarningsRates", tenant_id, access_token)
-            rates = data.get("EarningsRates", [])
+            data  = xero_get("/payroll.xro/1.0/payitems", tenant_id, access_token)
+            rates = data.get("PayItems", {}).get("EarningsRates", [])
             for r in sorted(rates, key=lambda x: x.get("Name", "")):
                 print(f"  {r['EarningsRateID']}  {r['Name']}")
         except Exception as e:
