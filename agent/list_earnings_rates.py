@@ -69,7 +69,8 @@ def main():
             data  = xero_get("/payroll.xro/1.0/payitems", tenant_id, access_token)
             rates = data.get("PayItems", {}).get("EarningsRates", [])
             for r in sorted(rates, key=lambda x: x.get("Name", "")):
-                print(f"  {r['EarningsRateID']}  {r['Name']}")
+                status = "" if r.get("CurrentRecord", True) else "  [ARCHIVED]"
+                print(f"  {r['EarningsRateID']}  {r['Name']}{status}")
         except Exception as e:
             print(f"  ERROR: {e}")
 
