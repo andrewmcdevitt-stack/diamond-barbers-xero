@@ -60,8 +60,8 @@ def main():
     tenants      = token_data.get("tenants", [])
 
     for tenant in tenants:
-        tenant_id   = tenant["tenantId"]
-        tenant_name = tenant["tenantName"]
+        tenant_id   = tenant["id"]
+        tenant_name = tenant["name"]
         print(f"\n{'='*60}")
         print(f"ORG: {tenant_name}  (tenantId={tenant_id})")
         print(f"{'='*60}")
