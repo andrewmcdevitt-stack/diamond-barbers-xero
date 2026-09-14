@@ -59,6 +59,7 @@ ORG_RATES = {
         "public_holiday": "9e0ed6e9-a684-4e4b-ac86-628e8d4195b8",
         "tips":           "759bbf1f-a20a-4123-bb17-80842dc688ec",
         "commission":     "fb04b066-99fa-4b56-815b-94092a009e38",
+        "bonus":          None,  # TODO: add Xero earnings rate ID for bonus
     },
     "DIAMOND BARBERS CAIRNS PTY LTD": {
         "monday":         "0ac27a0f-b798-4f26-b53a-7e1c1c300f03",
@@ -71,6 +72,7 @@ ORG_RATES = {
         "public_holiday": "eb5bfe90-fada-4888-be3c-576e4493a296",
         "tips":           "d6aef20e-4ed4-4d92-88c8-3dd3afa6eb23",
         "commission":     "42714ec9-fb41-4498-9cea-b0a2c8b6f4f3",
+        "bonus":          None,  # TODO: add Xero earnings rate ID for bonus
     },
     "D.B. Parap Pty Ltd": {
         "monday":         "2c266681-811c-4c02-9ea0-f133885b214c",
@@ -83,6 +85,7 @@ ORG_RATES = {
         "public_holiday": "fdf8a34c-dae1-40a1-baad-1cc0d481f671",
         "tips":           "f9261b3a-0659-48e4-990c-40d770cef73c",
         "commission":     "9b40d911-89b7-401b-82c1-662fa9e2c782",
+        "bonus":          None,  # TODO: add Xero earnings rate ID for bonus
     },
     "DB WULGURU PTY LTD": {
         "monday":         "eb63cf89-3c03-465c-a6f1-7cd6ac94698c",
@@ -221,6 +224,7 @@ def load_from_ghl():
             "ph_hrs":         round(float(p.get("public_holiday_hours", 0) or 0), 2),
             "tips":           round(float(p.get("tips",        0) or 0), 2),
             "commission":     round(float(p.get("commissions", 0) or 0), 2),
+            "bonus":          round(float(p.get("bonus",       0) or 0), 2),
         }
 
     print(f"  Loaded {len(data)} employees.")
@@ -365,6 +369,11 @@ def process_org(tenant_id, tenant_name, access_token, ghl_data):
         if emp["ph_hrs"]        > 0: lines.append({"EarningsRateID": rates["public_holiday"],"NumberOfUnits": emp["ph_hrs"]})
         if emp["tips"]          > 0: lines.append({"EarningsRateID": rates["tips"],      "NumberOfUnits": 1, "RatePerUnit": emp["tips"]})
         if emp["commission"]    > 0: lines.append({"EarningsRateID": rates["commission"],"NumberOfUnits": 1, "RatePerUnit": emp["commission"]})
+        bonus_rate_id = rates.get("bonus")
+        if emp.get("bonus", 0) > 0 and bonus_rate_id:
+            lines.append({"EarningsRateID": bonus_rate_id, "NumberOfUnits": 1, "RatePerUnit": emp["bonus"]})
+        elif emp.get("bonus", 0) > 0 and not bonus_rate_id:
+            print(f"  WARNING: bonus ${emp['bonus']:.2f} for {xero_norm} — no bonus rate ID configured for {ghl_org_label}")
 
         payslip_list.append({
             "EmployeeID":    emp_id,

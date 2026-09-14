@@ -1,0 +1,41 @@
+name: List Xero Earnings Rates
+
+on:
+  workflow_dispatch:
+
+jobs:
+  list:
+    runs-on: ubuntu-latest
+
+    env:
+      XERO_CLIENT_ID:     ${{ secrets.XERO_CLIENT_ID }}
+      XERO_CLIENT_SECRET: ${{ secrets.XERO_CLIENT_SECRET }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore Xero token
+        run: |
+          mkdir -p data
+          echo "${{ secrets.XERO_TOKEN_B64 }}" | base64 --decode > data/xero_token.json
+
+      - name: List earnings rates for all orgs
+        run: python agent/list_earnings_rates.py
+
+      - name: Save updated Xero token
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          if [ -f data/xero_token.json ]; then
+            base64 -w 0 data/xero_token.json | gh secret set XERO_TOKEN_B64 --repo ${{ github.repository }}
+          fi
