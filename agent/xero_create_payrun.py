@@ -59,7 +59,7 @@ ORG_RATES = {
         "public_holiday": "9e0ed6e9-a684-4e4b-ac86-628e8d4195b8",
         "tips":           "759bbf1f-a20a-4123-bb17-80842dc688ec",
         "commission":     "fb04b066-99fa-4b56-815b-94092a009e38",
-        "bonus":          None,  # TODO: add Xero earnings rate ID for bonus
+        "bonus":          "dd0c717f-95e1-42d0-9946-929c73ce1857",
     },
     "DIAMOND BARBERS CAIRNS PTY LTD": {
         "monday":         "0ac27a0f-b798-4f26-b53a-7e1c1c300f03",
@@ -72,7 +72,7 @@ ORG_RATES = {
         "public_holiday": "eb5bfe90-fada-4888-be3c-576e4493a296",
         "tips":           "d6aef20e-4ed4-4d92-88c8-3dd3afa6eb23",
         "commission":     "42714ec9-fb41-4498-9cea-b0a2c8b6f4f3",
-        "bonus":          None,  # TODO: add Xero earnings rate ID for bonus
+        "bonus":          "1f61ce7e-2e5b-43e6-85d4-55f9e194a9e5",
     },
     "D.B. Parap Pty Ltd": {
         "monday":         "2c266681-811c-4c02-9ea0-f133885b214c",
@@ -85,7 +85,7 @@ ORG_RATES = {
         "public_holiday": "fdf8a34c-dae1-40a1-baad-1cc0d481f671",
         "tips":           "f9261b3a-0659-48e4-990c-40d770cef73c",
         "commission":     "9b40d911-89b7-401b-82c1-662fa9e2c782",
-        "bonus":          None,  # TODO: add Xero earnings rate ID for bonus
+        "bonus":          "a4e34e00-baca-4294-958c-c299e3a5ba22",
     },
     "DB WULGURU PTY LTD": {
         "monday":         "eb63cf89-3c03-465c-a6f1-7cd6ac94698c",
