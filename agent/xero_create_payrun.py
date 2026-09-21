@@ -131,7 +131,6 @@ XERO_TO_GHL = {
 EMPLOYEE_ORG_OVERRIDE = {
     "andrea palma":        "Diamond Barbers Darwin",
     "brazil lamsen":       "Diamond Barbers Darwin",
-    "krish manocha":       "Diamond Barbers Parap",
     "vincenzo vanzanella": "Diamond Barbers Parap",
     "sean maguire":        "Diamond Barbers Parap",
 }
